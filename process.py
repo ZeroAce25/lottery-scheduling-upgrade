@@ -12,6 +12,8 @@ class Process:
     def __init__(self, id) -> None:
         self.uuid = id
         self.tickets = []
+        self.burst_time = random.randint(1, 5) 
+        self.wins = 0
 
 # Create a Scheduler class that can add process, allocate tickets, etc. 
 class Scheduler:
@@ -55,27 +57,29 @@ class Scheduler:
             if lottery_winner in process.tickets:      
                 print(f"Process {process.uuid} wins the lottery!")
                 break
-
+    def summary(self):
+        print("\n=== Simulation Summary ===")
+        for process in self.processes:
+            print(f"Process {process.uuid} | Burst Time: {process.burst_time} | Total Wins: {process.wins}")
 # Define main function of the program
 def main():
-    # Pick a random number to generate the number of processes
-    random_process = random.randint(2, 6)
+    random_process = random.randint(3, 6)
     scheduler = Scheduler()
 
-    # Generate a random number of processes to the scheduler
-    print("Adding processes to scheduler...")
+    print("Adding processes to scheduler...\n")
     for i in range(1, random_process + 1):
         scheduler.add(Process(i))
 
-    # Allocate tickets and start the scheduler
-    # Using a loop shows us that every time we run the scheduler we see that
-    # the process is being randomly selected
-    print("Assigning tickets...")
-    scheduler.allocate_tickets()
+    total_cycles = 5
+    for cycle in range(1, total_cycles + 1):
+        print(f"\n=== Cycle {cycle} ===")
+        print("Assigning tickets...")
+        scheduler.allocate_tickets()
 
-    print("Starting scheduling...")
-    for i in range(random_process):
+        print("Starting scheduling...")
         scheduler.start()
+
+    scheduler.summary()
 
 if __name__ == '__main__':
     main()
